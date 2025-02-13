@@ -1,23 +1,59 @@
-import logo from './logo.svg';
 import './App.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchBoards, fetchBoard } from './app/slices/boardSlice';
+import BoardView from './components/BoardView';
+
+const _ = require('lodash')
+
+// we will have our board as the main component
 
 function App() {
+  const dispatch = useDispatch()
+  const boards = useSelector((state) => {
+    console.log("redux state", state.storeBoards.boards)
+    return state.storeBoards.boards
+  })
+
+  if(!_.isEmpty(boards)){
+    return (
+      <div>
+        <div> Here are all of the boards</div>
+        <ul>
+        {boards.map((b) => {
+          return <li key={b._id}>{b.name}</li>
+        })}
+        </ul>
+        <BoardView />
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <div>no boards yet</div>
+        <button
+      onClick={() => {
+        dispatch(fetchBoards())
+      }}
+      >
+        make call to backend
+      </button>
+      </div>
+    )
+  }
+
+  console.log("boards", boards)
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      
+      <p>{boards.boards}</p>
+      
+      
+      <button
+      onClick={() => {
+        dispatch(fetchBoard())
+      }}
+      >fetch a single board</button>
+
     </div>
   );
 }
