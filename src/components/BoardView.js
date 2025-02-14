@@ -23,6 +23,7 @@ const BoardView = () => {
         Got our new boards
         <p
         onClick={() => {dispatch(fetchBoard(boards[0]._id))}}
+        
         >
         {boards[0].name}
         </p>
